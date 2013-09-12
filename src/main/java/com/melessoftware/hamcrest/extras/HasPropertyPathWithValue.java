@@ -39,11 +39,11 @@ public class HasPropertyPathWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
     @Override
     protected boolean matchesSafely(T item, Description mismatchDescription) {
         final String[] pathParts = propertyPath.split("\\.");
-        Condition<Object> x = property(pathParts[0], item, mismatchDescription);
+        Condition<Object> condition = property(pathParts[0], item, mismatchDescription);
         for (int i = 1; i < pathParts.length; i++) {
-            x = x.and(follow(pathParts[i]));
+            condition = condition.and(follow(pathParts[i]));
         }
-        return x.matching(valueMatcher, "\" ");
+        return condition.matching(valueMatcher, "\" ");
     }
 
     @Override
