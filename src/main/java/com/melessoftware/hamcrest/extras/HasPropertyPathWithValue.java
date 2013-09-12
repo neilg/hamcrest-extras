@@ -18,11 +18,15 @@
 
 package com.melessoftware.hamcrest.extras;
 
+import static org.hamcrest.Condition.matched;
+import static org.hamcrest.Condition.notMatched;
+
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.hamcrest.Condition;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
@@ -30,9 +34,9 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
 public class HasPropertyPathWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
 
     private final String propertyPath;
-    private final Matcher<?> valueMatcher;
+    private final Matcher<Object> valueMatcher;
 
-    public HasPropertyPathWithValue(String propertyPath, Matcher<?> valueMatcher) {
+    public HasPropertyPathWithValue(String propertyPath, Matcher<Object> valueMatcher) {
         this.propertyPath = propertyPath;
         this.valueMatcher = valueMatcher;
     }
@@ -40,36 +44,49 @@ public class HasPropertyPathWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
     @Override
     protected boolean matchesSafely(T item, Description mismatchDescription) {
         final String[] pathParts = propertyPath.split("\\.");
-        Object currentItem = item;
-        mismatchDescription.appendText("property path \"");
-        try {
-            for (int i = 0; i < pathParts.length; i++) {
-                String pathPart = pathParts[i];
-                if (i > 0) {
-                    mismatchDescription.appendText(".");
-                }
-                mismatchDescription.appendText(pathPart);
-                PropertyDescriptor pd = new PropertyDescriptor(pathPart, currentItem.getClass());
-                Method readMethod = pd.getReadMethod();
-                if (readMethod == null) {
-                    mismatchDescription.appendText(" is not readable");
-                    return false;
-                }
-                currentItem = readMethod.invoke(currentItem);
+        Condition<Object> x = property(pathParts[0], item, mismatchDescription);
+        for (int i = 1; i < pathParts.length; i++) {
+            x = x.and(follow(pathParts[i]));
+        }
+        return x.matching(valueMatcher, "\" ");
+    }
+
+    private Condition<Object> property(String pathPart, T item, Description mismatchDescription) {
+        mismatchDescription.appendText("property path \"" + pathPart);
+        return proceed(pathPart, item, mismatchDescription);
+    }
+
+    private Condition.Step<Object, Object> follow(final String pathPart) {
+        return new Condition.Step<Object, Object>() {
+            @Override
+            public Condition<Object> apply(Object item, Description mismatchDescription) {
+                mismatchDescription.appendText(".").appendText(pathPart);
+                return proceed(pathPart, item, mismatchDescription);
+
             }
+        };
+    }
+
+    private Condition<Object> proceed(String pathPart, Object item, Description mismatchDescription) {
+        try {
+            PropertyDescriptor pd = new PropertyDescriptor(pathPart, item.getClass());
+            Method readMethod = pd.getReadMethod();
+            if (readMethod == null) {
+                mismatchDescription.appendText("\" is not readable");
+                return notMatched();
+            }
+            Object nextItem = readMethod.invoke(item);
+            return matched(nextItem, mismatchDescription);
         } catch (IntrospectionException ie) {
             mismatchDescription.appendText("\" does not exist");
-            return false;
+            return notMatched();
         } catch (InvocationTargetException e) {
             mismatchDescription.appendText("\" ").appendText(e.getMessage());
-            return false;
+            return notMatched();
         } catch (IllegalAccessException e) {
             mismatchDescription.appendText("\" ").appendText(e.getMessage());
-            return false;
+            return notMatched();
         }
-        mismatchDescription.appendText("\" ");
-        valueMatcher.describeMismatch(currentItem, mismatchDescription);
-        return valueMatcher.matches(currentItem);
     }
 
     @Override
@@ -81,7 +98,7 @@ public class HasPropertyPathWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
         valueMatcher.describeTo(description);
     }
 
-    public static <X> Matcher<X> hasPropertyPathWithValue(String propertyPath, Matcher<?> matcher) {
+    public static <X> Matcher<X> hasPropertyPathWithValue(String propertyPath, Matcher<Object> matcher) {
         return new HasPropertyPathWithValue<X>(propertyPath, matcher);
     }
 }
