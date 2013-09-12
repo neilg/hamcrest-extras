@@ -20,9 +20,7 @@ package com.melessoftware.hamcrest.extras;
 
 import static com.melessoftware.hamcrest.extras.PropertyConditions.follow;
 import static com.melessoftware.hamcrest.extras.PropertyConditions.property;
-
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
+import static com.melessoftware.hamcrest.extras.PropertyConditions.propertyExists;
 
 import org.hamcrest.Condition;
 import org.hamcrest.Description;
@@ -44,26 +42,8 @@ public class HasPropertyPath<T> extends TypeSafeDiagnosingMatcher<T> {
         for (int i = 1; i < pathParts.length - 1; i++) {
             condition = condition.and(follow(pathParts[i]));
         }
-        return condition.matching(new TypeSafeDiagnosingMatcher<Object>() {
-            @Override
-            protected boolean matchesSafely(Object item, Description mismatchDescription) {
-                final String lastPart = pathParts[pathParts.length - 1];
-                mismatchDescription
-                        .appendText(".")
-                        .appendText(lastPart);
-                try {
-                    new PropertyDescriptor(lastPart, item.getClass());
-                } catch (IntrospectionException e) {
-                    mismatchDescription.appendText("\" does not exist");
-                    return false;
-                }
-                return true;
-            }
-
-            @Override
-            public void describeTo(Description description) {
-            }
-        });
+        final String lastPart = pathParts[pathParts.length - 1];
+        return condition.matching(propertyExists(lastPart));
     }
 
     @Override

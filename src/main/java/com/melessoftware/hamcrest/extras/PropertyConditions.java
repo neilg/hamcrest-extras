@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 
 import org.hamcrest.Condition;
 import org.hamcrest.Description;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 class PropertyConditions {
     static Condition<Object> property(String pathPart, Object item, Description mismatchDescription) {
@@ -45,9 +46,28 @@ class PropertyConditions {
         };
     }
 
+    static TypeSafeDiagnosingMatcher<Object> propertyExists(final String propertyName) {
+        return new TypeSafeDiagnosingMatcher<Object>() {
+            @Override
+            protected boolean matchesSafely(Object item, Description mismatchDescription) {
+                mismatchDescription
+                        .appendText(".")
+                        .appendText(propertyName);
+                return propertyDescriptor(propertyName, item, mismatchDescription) != null;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+            }
+        };
+    }
+
     private static Condition<Object> proceed(String pathPart, Object item, Description mismatchDescription) {
         try {
-            PropertyDescriptor pd = new PropertyDescriptor(pathPart, item.getClass());
+            PropertyDescriptor pd = propertyDescriptor(pathPart, item, mismatchDescription);
+            if (pd == null) {
+                return notMatched();
+            }
             Method readMethod = pd.getReadMethod();
             if (readMethod == null) {
                 mismatchDescription.appendText("\" is not readable");
@@ -55,15 +75,21 @@ class PropertyConditions {
             }
             Object nextItem = readMethod.invoke(item);
             return matched(nextItem, mismatchDescription);
-        } catch (IntrospectionException ie) {
-            mismatchDescription.appendText("\" does not exist");
-            return notMatched();
         } catch (InvocationTargetException e) {
             mismatchDescription.appendText("\" ").appendText(e.getMessage());
             return notMatched();
         } catch (IllegalAccessException e) {
             mismatchDescription.appendText("\" ").appendText(e.getMessage());
             return notMatched();
+        }
+    }
+
+    private static PropertyDescriptor propertyDescriptor(String pathPart, Object item, Description mismatchDescription) {
+        try {
+            return new PropertyDescriptor(pathPart, item.getClass());
+        } catch (IntrospectionException e) {
+            mismatchDescription.appendText("\" does not exist");
+            return null;
         }
     }
 
