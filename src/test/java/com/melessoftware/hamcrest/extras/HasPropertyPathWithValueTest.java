@@ -96,6 +96,16 @@ public class HasPropertyPathWithValueTest {
         assertThat(description.toString(), is("property path \"bar.bob\" does not exist"));
     }
 
+    @Test
+    public void mismatchDescriptionHighlightsThrownException() {
+        Bob bob = new Bob();
+        Description description = new StringDescription();
+
+        hasPropertyPathWithValue("asdf", Matchers.<Object>equalTo("23")).describeMismatch(bob, description);
+
+        assertThat(description.toString(), is("property path \"asdf\" error \"Hello from bob\""));
+    }
+
     private Foo foo() {
         Baz baz = new Baz();
         baz.setValue("asdf");
@@ -106,6 +116,16 @@ public class HasPropertyPathWithValueTest {
         Foo foo = new Foo();
         foo.setBar(bar);
         return foo;
+    }
+
+    public static class Bob {
+        public String getAsdf() {
+            throw new RuntimeException("Hello from bob");
+        }
+
+        public void setAsdf(String asdf) {
+        }
+
     }
 
     public static class Foo {

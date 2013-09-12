@@ -76,7 +76,9 @@ class PropertyConditions {
             Object nextItem = readMethod.invoke(item);
             return matched(nextItem, mismatchDescription);
         } catch (InvocationTargetException e) {
-            mismatchDescription.appendText("\" ").appendText(e.getMessage());
+            mismatchDescription
+                    .appendText("\" error ")
+                    .appendValue(e.getTargetException().getMessage());
             return notMatched();
         } catch (IllegalAccessException e) {
             mismatchDescription.appendText("\" ").appendText(e.getMessage());
