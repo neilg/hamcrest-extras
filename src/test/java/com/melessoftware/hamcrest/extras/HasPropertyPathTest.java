@@ -62,7 +62,7 @@ public class HasPropertyPathTest {
     }
 
     @Test
-    public void xmismatchDescriptionHighlightsMissingProperty() {
+    public void mismatchDescriptionHighlightsMissingFinalProperty() {
         Foo foo = foo();
         Description description = new StringDescription();
 
