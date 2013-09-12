@@ -18,13 +18,8 @@
 
 package com.melessoftware.hamcrest.extras;
 
-import static org.hamcrest.Condition.matched;
-import static org.hamcrest.Condition.notMatched;
-
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import static com.melessoftware.hamcrest.extras.PropertyConditions.follow;
+import static com.melessoftware.hamcrest.extras.PropertyConditions.property;
 
 import org.hamcrest.Condition;
 import org.hamcrest.Description;
@@ -49,44 +44,6 @@ public class HasPropertyPathWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
             x = x.and(follow(pathParts[i]));
         }
         return x.matching(valueMatcher, "\" ");
-    }
-
-    private Condition<Object> property(String pathPart, T item, Description mismatchDescription) {
-        mismatchDescription.appendText("property path \"" + pathPart);
-        return proceed(pathPart, item, mismatchDescription);
-    }
-
-    private Condition.Step<Object, Object> follow(final String pathPart) {
-        return new Condition.Step<Object, Object>() {
-            @Override
-            public Condition<Object> apply(Object item, Description mismatchDescription) {
-                mismatchDescription.appendText(".").appendText(pathPart);
-                return proceed(pathPart, item, mismatchDescription);
-
-            }
-        };
-    }
-
-    private Condition<Object> proceed(String pathPart, Object item, Description mismatchDescription) {
-        try {
-            PropertyDescriptor pd = new PropertyDescriptor(pathPart, item.getClass());
-            Method readMethod = pd.getReadMethod();
-            if (readMethod == null) {
-                mismatchDescription.appendText("\" is not readable");
-                return notMatched();
-            }
-            Object nextItem = readMethod.invoke(item);
-            return matched(nextItem, mismatchDescription);
-        } catch (IntrospectionException ie) {
-            mismatchDescription.appendText("\" does not exist");
-            return notMatched();
-        } catch (InvocationTargetException e) {
-            mismatchDescription.appendText("\" ").appendText(e.getMessage());
-            return notMatched();
-        } catch (IllegalAccessException e) {
-            mismatchDescription.appendText("\" ").appendText(e.getMessage());
-            return notMatched();
-        }
     }
 
     @Override

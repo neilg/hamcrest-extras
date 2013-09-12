@@ -18,11 +18,13 @@
 
 package com.melessoftware.hamcrest.extras;
 
+import static com.melessoftware.hamcrest.extras.PropertyConditions.follow;
+import static com.melessoftware.hamcrest.extras.PropertyConditions.property;
+
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
+import org.hamcrest.Condition;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
@@ -38,36 +40,30 @@ public class HasPropertyPath<T> extends TypeSafeDiagnosingMatcher<T> {
     @Override
     protected boolean matchesSafely(T item, Description mismatchDescription) {
         final String[] pathParts = propertyPath.split("\\.");
-        Object currentItem = item;
-        mismatchDescription.appendText("property path \"");
-        try {
-            for (int i = 0; i < pathParts.length; i++) {
-                String pathPart = pathParts[i];
-                if (i > 0) {
-                    mismatchDescription.appendText(".");
-                }
-                mismatchDescription.appendText(pathPart);
-                PropertyDescriptor pd = new PropertyDescriptor(pathPart, currentItem.getClass());
-                Method readMethod = pd.getReadMethod();
-                if (readMethod == null) {
-                    mismatchDescription.appendText(" is not readable");
+        Condition<Object> condition = property(pathParts[0], item, mismatchDescription);
+        for (int i = 1; i < pathParts.length - 1; i++) {
+            condition = condition.and(follow(pathParts[i]));
+        }
+        return condition.matching(new TypeSafeDiagnosingMatcher<Object>() {
+            @Override
+            protected boolean matchesSafely(Object item, Description mismatchDescription) {
+                final String lastPart = pathParts[pathParts.length - 1];
+                mismatchDescription
+                        .appendText(".")
+                        .appendText(lastPart);
+                try {
+                    new PropertyDescriptor(lastPart, item.getClass());
+                } catch (IntrospectionException e) {
+                    mismatchDescription.appendText("\" does not exist");
                     return false;
                 }
-                if (i < pathParts.length) {
-                    currentItem = readMethod.invoke(currentItem);
-                }
+                return true;
             }
-        } catch (IntrospectionException ie) {
-            mismatchDescription.appendText("\" does not exist");
-            return false;
-        } catch (InvocationTargetException e) {
-            mismatchDescription.appendText("\" ").appendText(e.getMessage());
-            return false;
-        } catch (IllegalAccessException e) {
-            mismatchDescription.appendText("\" ").appendText(e.getMessage());
-            return false;
-        }
-        return true;
+
+            @Override
+            public void describeTo(Description description) {
+            }
+        });
     }
 
     @Override

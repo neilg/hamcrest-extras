@@ -61,6 +61,16 @@ public class HasPropertyPathTest {
         assertThat(description.toString(), is("property path \"bar.bob\" does not exist"));
     }
 
+    @Test
+    public void xmismatchDescriptionHighlightsMissingProperty() {
+        Foo foo = foo();
+        Description description = new StringDescription();
+
+        hasPropertyPath("bar.baz.bib").describeMismatch(foo, description);
+
+        assertThat(description.toString(), is("property path \"bar.baz.bib\" does not exist"));
+    }
+
     private Foo foo() {
         Baz baz = new Baz();
         baz.setValue("asdf");
