@@ -60,6 +60,23 @@ public class HasPropertyPathWithValueTest {
     }
 
     @Test
+    public void doesntMatchEmptyProperty() {
+        Foo foo = foo();
+
+        assertFalse(hasPropertyPathWithValue("", any(Object.class)).matches(foo));
+    }
+
+    @Test
+    public void mismatchDescriptionHighlightsEmptyProperty() {
+        Foo foo = foo();
+        Description description = new StringDescription();
+
+        hasPropertyPathWithValue("", any(Object.class)).describeMismatch(foo, description);
+
+        assertThat(description.toString(), is("property path \"\" does not exist"));
+    }
+
+    @Test
     public void descriptionMismatchHighlightsValueMismatch() {
         Foo foo = foo();
 

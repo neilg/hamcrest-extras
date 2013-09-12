@@ -52,6 +52,23 @@ public class HasPropertyPathTest {
     }
 
     @Test
+    public void doesntMatchEmptyProperty() {
+        Foo foo = foo();
+
+        assertFalse(hasPropertyPath("").matches(foo));
+    }
+
+    @Test
+    public void mismatchDescriptionHighlightsEmptyProperty() {
+        Foo foo = foo();
+        Description description = new StringDescription();
+
+        hasPropertyPath("").describeMismatch(foo, description);
+
+        assertThat(description.toString(), is("property path \"\" does not exist"));
+    }
+
+    @Test
     public void mismatchDescriptionHighlightsMissingProperty() {
         Foo foo = foo();
         Description description = new StringDescription();
