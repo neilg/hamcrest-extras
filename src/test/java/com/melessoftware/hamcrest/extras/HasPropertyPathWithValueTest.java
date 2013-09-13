@@ -18,7 +18,7 @@
 
 package com.melessoftware.hamcrest.extras;
 
-import static com.melessoftware.hamcrest.extras.HasPropertyPathWithValue.hasPropertyPathWithValue;
+import static com.melessoftware.hamcrest.extras.HasPropertyPathWithValue.hasPropertyPath;
 import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
@@ -34,7 +34,7 @@ public class HasPropertyPathWithValueTest {
     @Test
     public void description() {
         Description description = new StringDescription();
-        hasPropertyPathWithValue("asdf.qwerty.foo", Matchers.<Object>equalTo(10)).describeTo(description);
+        hasPropertyPath("asdf.qwerty.foo", Matchers.<Object>equalTo(10)).describeTo(description);
         assertThat(description.toString(), is("has property path \"asdf.qwerty.foo\" with value <10>"));
     }
 
@@ -42,28 +42,28 @@ public class HasPropertyPathWithValueTest {
     public void matchesExtantProperty() {
         Foo foo = foo();
 
-        assertTrue(hasPropertyPathWithValue("bar.baz.value", Matchers.<Object>equalTo("asdf")).matches(foo));
+        assertTrue(hasPropertyPath("bar.baz.value", Matchers.<Object>equalTo("asdf")).matches(foo));
     }
 
     @Test
     public void doesntMatchMissingProperty() {
         Foo foo = foo();
 
-        assertFalse(hasPropertyPathWithValue("bar.bob.bib", any(Object.class)).matches(foo));
+        assertFalse(hasPropertyPath("bar.bob.bib", any(Object.class)).matches(foo));
     }
 
     @Test
     public void doesntMatchValueMismatch() {
         Foo foo = foo();
 
-        assertFalse(hasPropertyPathWithValue("bar.baz.value", Matchers.<Object>equalTo("23")).matches(foo));
+        assertFalse(hasPropertyPath("bar.baz.value", Matchers.<Object>equalTo("23")).matches(foo));
     }
 
     @Test
     public void doesntMatchEmptyProperty() {
         Foo foo = foo();
 
-        assertFalse(hasPropertyPathWithValue("", any(Object.class)).matches(foo));
+        assertFalse(hasPropertyPath("", any(Object.class)).matches(foo));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class HasPropertyPathWithValueTest {
         Foo foo = foo();
         Description description = new StringDescription();
 
-        hasPropertyPathWithValue("", any(Object.class)).describeMismatch(foo, description);
+        hasPropertyPath("", any(Object.class)).describeMismatch(foo, description);
 
         assertThat(description.toString(), is("property path \"\" does not exist"));
     }
@@ -81,7 +81,7 @@ public class HasPropertyPathWithValueTest {
         Foo foo = foo();
 
         Description description = new StringDescription();
-        hasPropertyPathWithValue("bar.baz.value", Matchers.<Object>equalTo("23")).describeMismatch(foo, description);
+        hasPropertyPath("bar.baz.value", Matchers.<Object>equalTo("23")).describeMismatch(foo, description);
 
         assertThat(description.toString(), is("property path \"bar.baz.value\" was \"asdf\""));
     }
@@ -91,7 +91,7 @@ public class HasPropertyPathWithValueTest {
         Foo foo = foo();
         Description description = new StringDescription();
 
-        hasPropertyPathWithValue("bar.bob.bib", Matchers.<Object>equalTo("23")).describeMismatch(foo, description);
+        hasPropertyPath("bar.bob.bib", Matchers.<Object>equalTo("23")).describeMismatch(foo, description);
 
         assertThat(description.toString(), is("property path \"bar.bob\" does not exist"));
     }
@@ -101,7 +101,7 @@ public class HasPropertyPathWithValueTest {
         Bob bob = new Bob();
         Description description = new StringDescription();
 
-        hasPropertyPathWithValue("asdf", Matchers.<Object>equalTo("23")).describeMismatch(bob, description);
+        hasPropertyPath("asdf", Matchers.<Object>equalTo("23")).describeMismatch(bob, description);
 
         assertThat(description.toString(), is("property path \"asdf\" error \"Hello from bob\""));
     }

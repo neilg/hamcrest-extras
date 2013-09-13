@@ -26,7 +26,7 @@ public class ExtraMatchers {
         return HasPropertyPath.hasPropertyPath(propertyPath);
     }
 
-    public static Matcher<Object> hasPropertyPathWithValue(String propertyPath, Matcher<Object> matcher) {
-        return HasPropertyPathWithValue.hasPropertyPathWithValue(propertyPath, matcher);
+    public static Matcher<Object> hasPropertyPath(String propertyPath, Matcher<Object> matcher) {
+        return HasPropertyPathWithValue.hasPropertyPath(propertyPath, matcher);
     }
 }

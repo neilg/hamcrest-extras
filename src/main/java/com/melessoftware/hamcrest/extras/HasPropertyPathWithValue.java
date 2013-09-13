@@ -55,7 +55,7 @@ public class HasPropertyPathWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
         valueMatcher.describeTo(description);
     }
 
-    public static <X> Matcher<X> hasPropertyPathWithValue(String propertyPath, Matcher<Object> matcher) {
+    public static <X> Matcher<X> hasPropertyPath(String propertyPath, Matcher<Object> matcher) {
         return new HasPropertyPathWithValue<X>(propertyPath, matcher);
     }
 }
