@@ -27,6 +27,7 @@
     <artifactId>hamcrest-extras</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
+    <name>${project.artifactId}</name>
     <description>Additional matchers for hamcrest</description>
     <url>https://github.com/neilg/hamcrest-extras</url>
 
@@ -48,8 +49,17 @@
     </properties>
 
     <scm>
+        <url>https://github.com/neilg/hamcrest-extras</url>
         <connection>scm:git:https://github.com/neilg/hamcrest-extras.git</connection>
     </scm>
+
+    <developers>
+        <developer>
+            <name>Neil Green</name>
+            <organization>Meles Software Limited</organization>
+            <timezone>Europe/London</timezone>
+        </developer>
+    </developers>
 
     <build>
         <pluginManagement>
