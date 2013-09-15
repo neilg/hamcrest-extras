@@ -20,16 +20,33 @@ package com.melessoftware.hamcrest.extras;
 
 import static com.melessoftware.hamcrest.extras.NarrowMatcher.narrow;
 import static org.hamcrest.Matchers.any;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
 public class NarrowMatcherTest {
 
+    private final Matcher<Object> alwaysMatch = any(Object.class);
+    private final Matcher<Object> neverMatch = not(alwaysMatch);
+
     @Test
-    public void shouldNarrowAllowedClasses() {
-        Matcher<String> matcherUnderTest = narrow(String.class, any(Object.class));
+    public void shouldMatchIfClassConformsAndUnderlyingMatcherMatches() {
+        Matcher<String> matcherUnderTest = narrow(alwaysMatch).to(String.class);
+        assertTrue(matcherUnderTest.matches("asdf"));
+    }
+
+    @Test
+    public void shouldNotMatchIfClassDoesNotConformAndUnderlyingMatcherMatches() {
+        Matcher<String> matcherUnderTest = narrow(alwaysMatch).to(String.class);
         assertFalse(matcherUnderTest.matches(new Object()));
+    }
+
+    @Test
+    public void shouldNotMatchIfClassConformsAndUnderlyingMatcherDoesntMatch() {
+        Matcher<String> matcherUnderTest = narrow(neverMatch).to(String.class);
+        assertFalse(matcherUnderTest.matches("asdf"));
     }
 }

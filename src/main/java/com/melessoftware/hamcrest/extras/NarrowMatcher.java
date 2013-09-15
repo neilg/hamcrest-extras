@@ -49,4 +49,22 @@ public class NarrowMatcher<T> extends TypeSafeMatcher<T> {
     public static <X> Matcher<X> narrow(Class<X> klass, Matcher<?> matcher) {
         return new NarrowMatcher<X>(klass, matcher);
     }
+
+    public static NarrowMatcherBuilder narrow(Matcher<?> matcher) {
+        return new NarrowMatcherBuilder(matcher);
+    }
+
+    public static class NarrowMatcherBuilder {
+
+        private final Matcher<?> matcher;
+
+        public NarrowMatcherBuilder(Matcher<?> matcher) {
+            this.matcher = matcher;
+        }
+
+        public <X> Matcher<X> to(Class<X> klass) {
+            return narrow(klass, matcher);
+        }
+    }
+
 }
