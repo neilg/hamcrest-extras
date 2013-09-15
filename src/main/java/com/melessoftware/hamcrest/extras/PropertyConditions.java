@@ -22,6 +22,7 @@ import static org.hamcrest.Condition.matched;
 import static org.hamcrest.Condition.notMatched;
 
 import java.beans.IntrospectionException;
+import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -88,12 +89,18 @@ class PropertyConditions {
 
     private static PropertyDescriptor propertyDescriptor(String pathPart, Object item, Description mismatchDescription) {
         try {
-            return new PropertyDescriptor(pathPart, item.getClass());
+            PropertyDescriptor[] pds = Introspector.getBeanInfo(item.getClass()).getPropertyDescriptors();
+            for (PropertyDescriptor pd : pds) {
+                if (pd.getName().equals(pathPart)) {
+                    return pd;
+                }
+            }
+            mismatchDescription.appendText("\" does not exist");
+            return null;
         } catch (IntrospectionException e) {
             mismatchDescription.appendText("\" does not exist");
             return null;
         }
     }
-
 
 }

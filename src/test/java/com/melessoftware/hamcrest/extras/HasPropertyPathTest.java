@@ -52,6 +52,11 @@ public class HasPropertyPathTest {
     }
 
     @Test
+    public void doesntMatchUnreadableProperty() {
+        assertFalse(hasPropertyPath("value").matches(new Asdf()));
+    }
+
+    @Test
     public void doesntMatchEmptyProperty() {
         Foo foo = foo();
 
@@ -76,6 +81,15 @@ public class HasPropertyPathTest {
         hasPropertyPath("bar.bob.bib").describeMismatch(foo, description);
 
         assertThat(description.toString(), is("property path \"bar.bob\" does not exist"));
+    }
+
+    @Test
+    public void mismatchDescriptionHighlightsUnreadableProperty() {
+        Description description = new StringDescription();
+
+        hasPropertyPath("value").describeMismatch(new Asdf(), description);
+
+        assertThat(description.toString(), is("property path \"value\" is not readable"));
     }
 
     @Test
@@ -137,6 +151,12 @@ public class HasPropertyPathTest {
         public void setValue(String value) {
             this.value = value;
         }
-
     }
+
+    public static class Asdf {
+        public void setValue(String value) {
+
+        }
+    }
+
 }
