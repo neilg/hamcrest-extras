@@ -57,7 +57,7 @@
         <developer>
             <name>Neil Green</name>
             <organization>Meles Software Limited</organization>
-            <timezone>Europe/London</timezone>
+            <timezone>0</timezone>
         </developer>
     </developers>
 
