@@ -26,11 +26,11 @@ public class ExtraMatchers {
         return CastMatcher.cast(matcher);
     }
 
-    public static Matcher<Object> hasPropertyPath(String propertyPath) {
+    public static <X> Matcher<X> hasPropertyPath(String propertyPath) {
         return HasPropertyPath.hasPropertyPath(propertyPath);
     }
 
-    public static Matcher<Object> hasPropertyPath(String propertyPath, Matcher<Object> matcher) {
+    public static <X> Matcher<X> hasPropertyPath(String propertyPath, Matcher<?> matcher) {
         return HasPropertyPathWithValue.hasPropertyPath(propertyPath, matcher);
     }
 }

@@ -18,6 +18,7 @@
 
 package com.melessoftware.hamcrest.extras;
 
+import static com.melessoftware.hamcrest.extras.CastMatcher.cast;
 import static com.melessoftware.hamcrest.extras.PropertyConditions.follow;
 import static com.melessoftware.hamcrest.extras.PropertyConditions.property;
 
@@ -55,7 +56,7 @@ public class HasPropertyPathWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
         valueMatcher.describeTo(description);
     }
 
-    public static <X> Matcher<X> hasPropertyPath(String propertyPath, Matcher<Object> matcher) {
-        return new HasPropertyPathWithValue<X>(propertyPath, matcher);
+    public static <X> Matcher<X> hasPropertyPath(String propertyPath, Matcher<?> matcher) {
+        return new HasPropertyPathWithValue<X>(propertyPath, cast(matcher));
     }
 }
