@@ -18,19 +18,29 @@
 
 package com.melessoftware.hamcrest.extras;
 
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 
-public class ExtraMatchers {
+public class CastMatcher<T> extends TypeSafeMatcher<T> {
 
-    public static <X> Matcher<X> cast(final Matcher<?> matcher) {
-        return CastMatcher.cast(matcher);
+    private final Matcher<?> matcher;
+
+    public CastMatcher(Matcher<?> matcher) {
+        this.matcher = matcher;
     }
 
-    public static Matcher<Object> hasPropertyPath(String propertyPath) {
-        return HasPropertyPath.hasPropertyPath(propertyPath);
+    @Override
+    protected boolean matchesSafely(T item) {
+        return matcher.matches(item);
     }
 
-    public static Matcher<Object> hasPropertyPath(String propertyPath, Matcher<Object> matcher) {
-        return HasPropertyPathWithValue.hasPropertyPath(propertyPath, matcher);
+    @Override
+    public void describeTo(Description description) {
+        description.appendDescriptionOf(matcher);
+    }
+
+    public static <X> Matcher<X> cast(Matcher<?> matcher) {
+        return new CastMatcher<X>(matcher);
     }
 }
