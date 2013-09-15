@@ -1,4 +1,5 @@
-# Meles Software Hamcrest Extras
+Meles Software Hamcrest Extras [![Build Status](https://travis-ci.org/neilg/hamcrest-extras.png?branch=master)](https://travis-ci.org/neilg/hamcrest-extras)
+==============================
 ## Matchers
 ### Property paths
 
