@@ -18,7 +18,7 @@
 
 package com.melessoftware.hamcrest.extras;
 
-import static com.melessoftware.hamcrest.extras.NarrowMatcher.narrow;
+import static com.melessoftware.hamcrest.extras.Narrow.narrow;
 import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertFalse;
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
-public class NarrowMatcherTest {
+public class NarrowTest {
 
     private final Matcher<Object> alwaysMatch = any(Object.class);
     private final Matcher<Object> neverMatch = not(alwaysMatch);

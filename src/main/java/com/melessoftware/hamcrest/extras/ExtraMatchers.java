@@ -23,7 +23,7 @@ import org.hamcrest.Matcher;
 public class ExtraMatchers {
 
     public static <X> Matcher<X> cast(final Matcher<?> matcher) {
-        return CastMatcher.cast(matcher);
+        return Cast.cast(matcher);
     }
 
     public static <X> Matcher<X> hasPropertyPath(String propertyPath) {

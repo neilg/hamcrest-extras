@@ -18,7 +18,7 @@
 
 package com.melessoftware.hamcrest.extras;
 
-import static com.melessoftware.hamcrest.extras.CastMatcher.cast;
+import static com.melessoftware.hamcrest.extras.Cast.cast;
 import static com.melessoftware.hamcrest.extras.PropertyConditions.follow;
 import static com.melessoftware.hamcrest.extras.PropertyConditions.property;
 

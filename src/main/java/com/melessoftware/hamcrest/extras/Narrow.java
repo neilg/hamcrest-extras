@@ -22,12 +22,12 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-public class NarrowMatcher<T> extends TypeSafeMatcher<T> {
+public class Narrow<T> extends TypeSafeMatcher<T> {
 
     private final Class<T> klass;
     private final Matcher<?> matcher;
 
-    public NarrowMatcher(Class<T> klass, Matcher<?> matcher) {
+    public Narrow(Class<T> klass, Matcher<?> matcher) {
         super(klass);
         this.klass = klass;
         this.matcher = matcher;
@@ -47,7 +47,7 @@ public class NarrowMatcher<T> extends TypeSafeMatcher<T> {
     }
 
     public static <X> Matcher<X> narrow(Class<X> klass, Matcher<?> matcher) {
-        return new NarrowMatcher<X>(klass, matcher);
+        return new Narrow<X>(klass, matcher);
     }
 
     public static NarrowMatcherBuilder narrow(Matcher<?> matcher) {

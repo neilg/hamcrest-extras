@@ -18,29 +18,18 @@
 
 package com.melessoftware.hamcrest.extras;
 
-import org.hamcrest.Description;
+import static com.melessoftware.hamcrest.extras.Cast.cast;
+import static org.hamcrest.Matchers.any;
+import static org.junit.Assert.assertTrue;
+
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
+import org.junit.Test;
 
-public class CastMatcher<T> extends TypeSafeMatcher<T> {
+public class CastTest {
 
-    private final Matcher<?> matcher;
-
-    public CastMatcher(Matcher<?> matcher) {
-        this.matcher = matcher;
-    }
-
-    @Override
-    protected boolean matchesSafely(T item) {
-        return matcher.matches(item);
-    }
-
-    @Override
-    public void describeTo(Description description) {
-        description.appendDescriptionOf(matcher);
-    }
-
-    public static <X> Matcher<X> cast(Matcher<?> matcher) {
-        return new CastMatcher<X>(matcher);
+    @Test
+    public void shouldNotNarrowAllowedClasses() {
+        Matcher<String> matcherUnderTest = cast(any(Object.class));
+        assertTrue(matcherUnderTest.matches(new Object()));
     }
 }
