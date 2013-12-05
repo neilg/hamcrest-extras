@@ -18,6 +18,7 @@
 
 package com.melessoftware.hamcrest.extras;
 
+import com.google.common.base.Optional;
 import org.hamcrest.Matcher;
 
 public class ExtraMatchers {
@@ -32,5 +33,17 @@ public class ExtraMatchers {
 
     public static <X> Matcher<X> hasPropertyPath(String propertyPath, Matcher<?> matcher) {
         return HasPropertyPathWithValue.hasPropertyPath(propertyPath, matcher);
+    }
+
+    public static <X> Matcher<Optional<X>> present() {
+        return Present.present();
+    }
+
+    public static <X> Matcher<Optional<X>> present(Matcher<? super X> matcher) {
+        return PresentWithValue.present(matcher);
+    }
+
+    public static <X> Matcher<Optional<X>> absent() {
+        return Absent.absent();
     }
 }
