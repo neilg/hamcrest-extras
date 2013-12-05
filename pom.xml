@@ -14,7 +14,7 @@
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses />.
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -23,7 +23,7 @@
 
     <groupId>com.melessoftware.hamcrest</groupId>
     <artifactId>hamcrest-extras</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.1.1</version>
 
     <name>${project.artifactId}</name>
     <description>Additional matchers for hamcrest</description>
@@ -51,7 +51,7 @@
         <url>https://github.com/neilg/hamcrest-extras</url>
         <connection>scm:git:https://github.com/neilg/hamcrest-extras.git</connection>
         <developerConnection>scm:git:git@github.com:neilg/hamcrest-extras.git</developerConnection>
-      <tag>hamcrest-extras-0.1.0</tag>
+      <tag>hamcrest-extras-0.1.1</tag>
   </scm>
 
     <developers>
