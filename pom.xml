@@ -23,7 +23,7 @@
 
     <groupId>com.melessoftware.hamcrest</groupId>
     <artifactId>hamcrest-extras</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0-SNAPSHOT</version>
 
     <name>${project.artifactId}</name>
     <description>Additional matchers for hamcrest</description>
@@ -51,7 +51,7 @@
         <url>https://github.com/neilg/hamcrest-extras</url>
         <connection>scm:git:https://github.com/neilg/hamcrest-extras.git</connection>
         <developerConnection>scm:git:git@github.com:neilg/hamcrest-extras.git</developerConnection>
-      <tag>hamcrest-extras-0.1.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <developers>
