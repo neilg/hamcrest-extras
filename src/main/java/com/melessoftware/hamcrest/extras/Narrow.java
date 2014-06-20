@@ -20,37 +20,41 @@ package com.melessoftware.hamcrest.extras;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
 
-public class Narrow<T> extends TypeSafeMatcher<T> {
+public class Narrow<T> extends TypeSafeDiagnosingMatcher<T> {
 
     private final Class<T> klass;
     private final Matcher<?> matcher;
 
-    public Narrow(Class<T> klass, Matcher<?> matcher) {
+    public Narrow(final Class<T> klass, final Matcher<?> matcher) {
         super(klass);
         this.klass = klass;
         this.matcher = matcher;
     }
 
     @Override
-    protected boolean matchesSafely(T item) {
-        return matcher.matches(item);
+    protected boolean matchesSafely(final T item, final Description mismatchDescription) {
+        final boolean matches = matcher.matches(item);
+        if (!matches) {
+            matcher.describeMismatch(item, mismatchDescription);
+        }
+        return matches;
     }
 
     @Override
-    public void describeTo(Description description) {
+    public void describeTo(final Description description) {
         description
                 .appendDescriptionOf(matcher)
                 .appendText(" restricted to an instance of ")
                 .appendValue(klass);
     }
 
-    public static <X> Matcher<X> narrow(Class<X> klass, Matcher<?> matcher) {
+    public static <X> Matcher<X> narrow(final Class<X> klass, final Matcher<?> matcher) {
         return new Narrow<X>(klass, matcher);
     }
 
-    public static NarrowMatcherBuilder narrow(Matcher<?> matcher) {
+    public static NarrowMatcherBuilder narrow(final Matcher<?> matcher) {
         return new NarrowMatcherBuilder(matcher);
     }
 
@@ -58,11 +62,11 @@ public class Narrow<T> extends TypeSafeMatcher<T> {
 
         private final Matcher<?> matcher;
 
-        public NarrowMatcherBuilder(Matcher<?> matcher) {
+        public NarrowMatcherBuilder(final Matcher<?> matcher) {
             this.matcher = matcher;
         }
 
-        public <X> Matcher<X> to(Class<X> klass) {
+        public <X> Matcher<X> to(final Class<X> klass) {
             return narrow(klass, matcher);
         }
     }

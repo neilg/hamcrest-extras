@@ -27,7 +27,7 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
 public class Absent<T> extends TypeSafeDiagnosingMatcher<Optional<T>> {
 
     @Override
-    protected boolean matchesSafely(Optional<T> item, Description mismatchDescription) {
+    protected boolean matchesSafely(final Optional<T> item, final Description mismatchDescription) {
         if (item.isPresent()) {
             mismatchDescription.appendText("is present");
             return false;
@@ -37,7 +37,7 @@ public class Absent<T> extends TypeSafeDiagnosingMatcher<Optional<T>> {
     }
 
     @Override
-    public void describeTo(Description description) {
+    public void describeTo(final Description description) {
         description.appendText("is absent");
     }
 

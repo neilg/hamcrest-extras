@@ -32,7 +32,7 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 class PropertyConditions {
-    static Condition<Object> property(String pathPart, Object item, Description mismatchDescription) {
+    static Condition<Object> property(final String pathPart, final Object item, final Description mismatchDescription) {
         mismatchDescription.appendText("property path \"" + pathPart);
         return proceed(pathPart, item, mismatchDescription);
     }
@@ -58,12 +58,12 @@ class PropertyConditions {
             }
 
             @Override
-            public void describeTo(Description description) {
+            public void describeTo(final Description description) {
             }
         };
     }
 
-    private static Condition<Object> proceed(String pathPart, Object item, Description mismatchDescription) {
+    private static Condition<Object> proceed(final String pathPart, final Object item, final Description mismatchDescription) {
         try {
             PropertyDescriptor pd = propertyDescriptor(pathPart, item, mismatchDescription);
             if (pd == null) {
@@ -87,7 +87,7 @@ class PropertyConditions {
         }
     }
 
-    private static PropertyDescriptor propertyDescriptor(String pathPart, Object item, Description mismatchDescription) {
+    private static PropertyDescriptor propertyDescriptor(final String pathPart, final Object item, final Description mismatchDescription) {
         try {
             PropertyDescriptor[] pds = Introspector.getBeanInfo(item.getClass()).getPropertyDescriptors();
             for (PropertyDescriptor pd : pds) {

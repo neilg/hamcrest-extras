@@ -26,21 +26,26 @@ public class Cast<T> extends TypeSafeMatcher<T> {
 
     private final Matcher<?> matcher;
 
-    public Cast(Matcher<?> matcher) {
+    public Cast(final Matcher<?> matcher) {
         this.matcher = matcher;
     }
 
     @Override
-    protected boolean matchesSafely(T item) {
+    protected boolean matchesSafely(final T item) {
         return matcher.matches(item);
     }
 
     @Override
-    public void describeTo(Description description) {
+    protected void describeMismatchSafely(final T item, final Description mismatchDescription) {
+        matcher.describeMismatch(item, mismatchDescription);
+    }
+
+    @Override
+    public void describeTo(final Description description) {
         description.appendDescriptionOf(matcher);
     }
 
-    public static <X> Matcher<X> cast(Matcher<?> matcher) {
+    public static <X> Matcher<X> cast(final Matcher<?> matcher) {
         return new Cast<X>(matcher);
     }
 }

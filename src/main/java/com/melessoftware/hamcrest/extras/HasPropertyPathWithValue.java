@@ -32,13 +32,13 @@ public class HasPropertyPathWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
     private final String propertyPath;
     private final Matcher<Object> valueMatcher;
 
-    public HasPropertyPathWithValue(String propertyPath, Matcher<Object> valueMatcher) {
+    public HasPropertyPathWithValue(final String propertyPath, final Matcher<Object> valueMatcher) {
         this.propertyPath = propertyPath;
         this.valueMatcher = valueMatcher;
     }
 
     @Override
-    protected boolean matchesSafely(T item, Description mismatchDescription) {
+    protected boolean matchesSafely(final T item, final Description mismatchDescription) {
         final String[] pathParts = propertyPath.split("\\.");
         Condition<Object> condition = property(pathParts[0], item, mismatchDescription);
         for (int i = 1; i < pathParts.length; i++) {
@@ -48,7 +48,7 @@ public class HasPropertyPathWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
     }
 
     @Override
-    public void describeTo(Description description) {
+    public void describeTo(final Description description) {
         description
                 .appendText("has property path ")
                 .appendValue(propertyPath)

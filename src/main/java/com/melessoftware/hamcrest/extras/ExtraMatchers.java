@@ -27,11 +27,11 @@ public class ExtraMatchers {
         return Cast.cast(matcher);
     }
 
-    public static <X> Matcher<X> hasPropertyPath(String propertyPath) {
+    public static <X> Matcher<X> hasPropertyPath(final String propertyPath) {
         return HasPropertyPath.hasPropertyPath(propertyPath);
     }
 
-    public static <X> Matcher<X> hasPropertyPath(String propertyPath, Matcher<?> matcher) {
+    public static <X> Matcher<X> hasPropertyPath(final String propertyPath, final Matcher<?> matcher) {
         return HasPropertyPathWithValue.hasPropertyPath(propertyPath, matcher);
     }
 
@@ -39,7 +39,7 @@ public class ExtraMatchers {
         return Present.present();
     }
 
-    public static <X> Matcher<Optional<X>> present(Matcher<? super X> matcher) {
+    public static <X> Matcher<Optional<X>> present(final Matcher<? super X> matcher) {
         return PresentWithValue.present(matcher);
     }
 

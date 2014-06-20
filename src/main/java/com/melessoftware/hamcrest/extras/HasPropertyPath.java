@@ -31,12 +31,12 @@ public class HasPropertyPath<T> extends TypeSafeDiagnosingMatcher<T> {
 
     private final String propertyPath;
 
-    public HasPropertyPath(String propertyPath) {
+    public HasPropertyPath(final String propertyPath) {
         this.propertyPath = propertyPath;
     }
 
     @Override
-    protected boolean matchesSafely(T item, Description mismatchDescription) {
+    protected boolean matchesSafely(final T item, final Description mismatchDescription) {
         final String[] pathParts = propertyPath.split("\\.");
         Condition<Object> condition = property(pathParts[0], item, mismatchDescription);
         for (int i = 1; i < pathParts.length - 1; i++) {
@@ -47,13 +47,13 @@ public class HasPropertyPath<T> extends TypeSafeDiagnosingMatcher<T> {
     }
 
     @Override
-    public void describeTo(Description description) {
+    public void describeTo(final Description description) {
         description
                 .appendText("has property path ")
                 .appendValue(propertyPath);
     }
 
-    public static <X> Matcher<X> hasPropertyPath(String propertyPath) {
+    public static <X> Matcher<X> hasPropertyPath(final String propertyPath) {
         return new HasPropertyPath<X>(propertyPath);
     }
 }

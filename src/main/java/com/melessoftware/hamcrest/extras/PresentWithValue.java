@@ -30,12 +30,12 @@ public class PresentWithValue<T> extends TypeSafeDiagnosingMatcher<Optional<T>> 
 
     private final Matcher<? super T> matcher;
 
-    public PresentWithValue(Matcher<? super T> matcher) {
+    public PresentWithValue(final Matcher<? super T> matcher) {
         this.matcher = matcher;
     }
 
     @Override
-    protected boolean matchesSafely(Optional<T> item, Description mismatchDescription) {
+    protected boolean matchesSafely(final Optional<T> item, final Description mismatchDescription) {
         if (item.isPresent()) {
             final T itemValue = item.get();
             if (matcher.matches(itemValue)) {
@@ -52,17 +52,17 @@ public class PresentWithValue<T> extends TypeSafeDiagnosingMatcher<Optional<T>> 
     }
 
     @Override
-    public void describeTo(Description description) {
+    public void describeTo(final Description description) {
         description.appendText("is present with value ").appendDescriptionOf(matcher);
     }
 
     @Factory
-    public static <X> Matcher<Optional<X>> present(Matcher<? super X> matcher) {
+    public static <X> Matcher<Optional<X>> present(final Matcher<? super X> matcher) {
         return new PresentWithValue<X>(matcher);
     }
 
     @Factory
-    public static <X> Matcher<Optional<X>> present(X value) {
+    public static <X> Matcher<Optional<X>> present(final X value) {
         return new PresentWithValue<X>(is(value));
     }
 }
